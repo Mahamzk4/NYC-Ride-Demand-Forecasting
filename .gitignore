@@ -1,0 +1,17 @@
+# Data files
+data/
+*.csv
+*.parquet
+*.npy
+*.npz
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environments
+.env
+venv/
