@@ -6,7 +6,7 @@ from torch.nn import functional as F
 
 
 class PerZoneLinearRegression(nn.Module):
-    def __init__(self, num_zones: int, history_length: int = 168, calendar_features: int = 4) -> None:
+    def __init__(self, num_zones: int, history_length: int = 336, calendar_features: int = 4) -> None:
         super().__init__()
         self.history_length = history_length
         self.history_weight = nn.Parameter(torch.zeros(num_zones, history_length))
@@ -22,7 +22,7 @@ class PerZoneLinearRegression(nn.Module):
     def forward(self, history: torch.Tensor, target_calendar: torch.Tensor) -> torch.Tensor:
         return (self._scaled(history, target_calendar) * self.scale).clamp_min(0)
 
-    def fit(self, history, target_calendar, targets, *, epochs=100, batch_size=256, learning_rate=1e-2, validation=None, patience=10):
+    def fit(self, history, target_calendar, targets, *, epochs=100, batch_size=256, learning_rate=3e-3, validation=None, patience=10):
         self.scale = targets.mean(dim=0).clamp_min(1)
         optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate)
         best_loss, best_state, bad_epochs = float("inf"), None, 0
